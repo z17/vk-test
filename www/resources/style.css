@@ -1,0 +1,46 @@
+body {
+    background: #f1f1f1;
+}
+
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+.header {
+    padding: 10px 50px;
+    border-bottom: 3px solid #aaa;
+}
+
+.content {
+    padding: 15px 15px 25px 15px;
+}
+
+.product {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.product:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.product .image {
+    float: left;
+    max-width: 250px;
+    margin: 0 15px 15px 0;
+}
+
+.product .panel {
+    float:right;
+    font-size:21px;
+}
+
+.product .panel a{
+    color:#000;
+    text-decoration: none;
+}
