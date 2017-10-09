@@ -1,5 +1,15 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #f1f1f1;
+}
+
+.clear:after {
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .wrapper {
@@ -17,16 +27,14 @@ body {
     padding: 15px 15px 25px 15px;
 }
 
+.menu a {
+    margin-right: 15px;
+}
+
 .product {
     border-bottom: 1px solid #aaa;
     margin-bottom: 15px;
     padding-bottom: 10px;
-}
-
-.product:after {
-    content: '';
-    display: block;
-    clear: both;
 }
 
 .product .image {
@@ -36,11 +44,49 @@ body {
 }
 
 .product .panel {
-    float:right;
-    font-size:21px;
+    float: right;
+    font-size: 21px;
 }
 
-.product .panel a{
-    color:#000;
+.product .panel a {
+    color: #000;
     text-decoration: none;
+}
+
+.order {
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+.order a {
+    margin: 0 5px;
+}
+
+.form-product {
+    width: 600px;
+}
+
+.form-product .input-name {
+    width: 20%;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.form-product textarea,
+.form-product input {
+    width: 80%;
+}
+
+.form-product textarea {
+    height: 200px;
+}
+
+.form-product .submit {
+    width: 120px;
+    float: right;
+}
+
+.add-page .status {
+    color:#ff0000;
 }

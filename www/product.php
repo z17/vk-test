@@ -3,10 +3,10 @@
 function product($id, $name, $description, $price, $img)
 {
     return [
-        'id' => $id,
+        'id' => (int)$id,
         'name' => $name,
         'description' => $description,
-        'price' => $price,
-        'image' => $img
+        'price' => (int)$price,
+        'img' => $img
     ];
 }

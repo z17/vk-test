@@ -1,0 +1,10 @@
+<div class="add-page">
+    <div class="status">[[errors]]</div>
+    <form action="/update/?id=[[id]]" method="POST" class="form-product">
+        <p><label><span class="input-name">Название:</span><input type="text" name="name" value="[[name]]" required/></label></p>
+        <p><label><span class="input-name">Описание:</span><textarea name="description" required>[[description]]</textarea></label></p>
+        <p><label><span class="input-name">Цена:</span><input type="number" name="price" value="[[price]]" required/></label></p>
+        <p><label><span class="input-name">Изображение:</span><input type="text" name="img" value="[[img]]" required/></label></p>
+        <input class="submit" type="submit" value="Сохранить">
+    </form>
+</div>

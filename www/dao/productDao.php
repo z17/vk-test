@@ -76,3 +76,24 @@ function getProductList($orderType, $limitStart, $limitEnd)
     }
     return $products;
 }
+
+function getProduct($id)
+{
+    $query = "SELECT id, name, description, price, img FROM product WHERE id = :id";
+    $base = getConnection();
+    $sql = $base->prepare($query);
+    $sql->bindParam(':id', $id);
+    $sql->execute();
+
+    $result = $sql->fetch(PDO::FETCH_ASSOC);
+    if ($result !== false) {
+        return $products[] = product(
+            $result['id'],
+            $result['name'],
+            $result['description'],
+            $result['price'],
+            $result['img']
+        );
+    }
+    return NULL;
+}
