@@ -69,6 +69,11 @@ function update($data) {
     echo prepareTemplate($content, 'Редактировать продукт');
 }
 
+function delete() {
+    $content = file_get_contents('./resources/template/delete.html');
+    echo prepareTemplate($content, 'Продукт удалён');
+}
+
 function prepareTemplate($content, $title)
 {
     $template = file_get_contents('./resources/template/template.html');

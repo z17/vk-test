@@ -50,5 +50,12 @@ function updateProduct($tryToAdd, $id, $name, $description, $price, $img)
 
 function deleteProduct($id)
 {
+    $product = Dao\getProduct($id);
+
+    if ($product == NULL) {
+        throw new \Exception("Unknown product");
+    }
+
+    Dao\deleteProduct($id);
 
 }

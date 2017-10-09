@@ -47,5 +47,9 @@ function updateProduct()
 
 function deleteProduct()
 {
+    $id = isset($_GET['id']) ? $_GET['id'] : null;
 
+    Model\deleteProduct($id);
+
+    View\delete();
 }
