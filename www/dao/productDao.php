@@ -11,6 +11,7 @@ function getConnection()
     if ($base == NULL) {
         $dbConfig = getConfig()['db'];
         $base = new PDO("mysql:host=" . $dbConfig['host'] . ";dbname=" . $dbConfig['name'], $dbConfig['user'], $dbConfig['password']);
+        $base->query("set names utf8");
     }
     return $base;
 }
@@ -52,6 +53,15 @@ function deleteProduct($id)
     $sql = $base->prepare($query);
     $sql->bindParam(':id', $id);
     $sql->execute();
+}
+
+function countProducts()
+{
+    $query = "SELECT COUNT(id) as count FROM product";
+    $base = getConnection();
+    $sql = $base->prepare($query);
+    $sql->execute();
+    return (int)$sql->fetch()['count'];
 }
 
 function getProductList($orderType, $limitStart, $limitEnd)

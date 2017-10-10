@@ -37,10 +37,15 @@ body {
     padding-bottom: 10px;
 }
 
-.product .image {
+.product .image-wrap {
+    text-align: center;
     float: left;
-    max-width: 250px;
+    width: 250px;
     margin: 0 15px 15px 0;
+}
+
+.product .image {
+    max-width: 250px;
 }
 
 .product .panel {
@@ -88,5 +93,18 @@ body {
 }
 
 .add-page .status {
-    color:#ff0000;
+    color: #ff0000;
+}
+
+.pagination {
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 3px;
+}
+
+.pagination a.current {
+    background: #f1f1f1;
 }

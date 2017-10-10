@@ -8,7 +8,14 @@ function getProducts($order, $page)
 {
     validateProductOrder($order);
     $limit = getProductsLimit($page);
-    return Dao\getProductList($order, $limit[0], $limit[1]);
+    $products = Dao\getProductList($order, $limit[0], $limit[1]);
+    $count = Dao\countProducts();
+    $maxPage = ceil($count / getConfig()['page_size']);
+    return [
+        'products' => $products,
+        'max_page' => $maxPage,
+        'current_page' => $page
+    ];
 }
 
 function addProduct($name, $description, $price, $img)

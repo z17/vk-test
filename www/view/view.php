@@ -4,12 +4,12 @@ namespace View;
 
 // todo: вынести в константы title и пути
 
-function main($productsArray)
+function main($productsData)
 {
     $productHtml = file_get_contents('./resources/template/product.html');
 
     $content = '';
-    foreach ($productsArray as $product) {
+    foreach ($productsData['products'] as $product) {
         $currentHtml = $productHtml;
         $currentHtml = str_replace('[[id]]', $product['id'], $currentHtml);
         $currentHtml = str_replace('[[image]]', $product['img'], $currentHtml);
@@ -21,6 +21,8 @@ function main($productsArray)
 
     $main = file_get_contents('./resources/template/main.html');
     $main = str_replace('[[products]]', $content, $main);
+    $main = str_replace('[[current-page]]', $productsData['current_page'], $main);
+    $main = str_replace('[[max-page]]', $productsData['max_page'], $main);
     echo prepareTemplate($main, 'Главная');
 }
 
@@ -51,7 +53,8 @@ function add($data)
     echo prepareTemplate($content, 'Добавить продукт');
 }
 
-function update($data) {
+function update($data)
+{
     $product = $data['product'];
 
     $errors = '';
@@ -69,7 +72,8 @@ function update($data) {
     echo prepareTemplate($content, 'Редактировать продукт');
 }
 
-function delete() {
+function delete()
+{
     $content = file_get_contents('./resources/template/delete.html');
     echo prepareTemplate($content, 'Продукт удалён');
 }
