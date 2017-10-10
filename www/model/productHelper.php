@@ -35,7 +35,7 @@ function getProductsLimit($pageNumber) {
     }
     return [
         ($pageNumber - 1) * $productsPerPage,
-        $pageNumber * $productsPerPage
+        $productsPerPage
     ];
 }
 

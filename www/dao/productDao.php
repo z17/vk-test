@@ -57,7 +57,7 @@ function deleteProduct($id)
 
 function countProducts()
 {
-    $query = "SELECT COUNT(id) as count FROM product";
+    $query = "SELECT COUNT(id) AS count FROM product";
     $base = getConnection();
     $sql = $base->prepare($query);
     $sql->execute();
@@ -66,7 +66,13 @@ function countProducts()
 
 function getProductList($orderType, $limitStart, $limitEnd)
 {
-    $query = "SELECT id, name, description, price, img FROM product ORDER BY $orderType LIMIT :start, :end";
+    $query = "
+      SELECT 
+        p.id, p.name, p.description, p.price, p.img 
+      FROM product p
+      JOIN (
+	    SELECT id FROM product ORDER BY $orderType LIMIT :start, :end 
+      ) AS i ON i.id = p.id;";
     $base = getConnection();
     $sql = $base->prepare($query);
     $sql->bindParam(':start', $limitStart, PDO::PARAM_INT);

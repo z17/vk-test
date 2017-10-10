@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS `product` (
-  id          INT(11)      NOT NULL AUTO_INCREMENT,
-  name        VARCHAR(255) NOT NULL,
-  description TEXT         NOT NULL,
-  price       INT(11)      NOT NULL,
-  img         VARCHAR(255) NOT NULL,
+  id          INT(11) UNSIGNED      NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(255)          NOT NULL,
+  description TEXT                  NOT NULL,
+  price       MEDIUMINT(7) UNSIGNED NOT NULL,
+  img         VARCHAR(255)          NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
