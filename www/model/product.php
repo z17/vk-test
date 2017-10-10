@@ -66,3 +66,21 @@ function deleteProduct($id)
     Dao\deleteProduct($id);
 
 }
+
+function generateTestData() {
+    $descData = file_get_contents('./resources/test-data.txt');
+    $descArray = explode("\n", $descData);
+    $count = 1000000;
+    for ($i = 0; $i < $count; $i++) {
+        $description = $descArray[rand(0, sizeof($descArray) - 1)];
+        $name = mb_substr($description , 0, rand(10, 25));
+        $price = rand(50, 5000000);
+        $product = product(0, $name, $description, $price, '');
+        Dao\addProduct($product);
+    }
+}
+
+function processError(\Exception $exception)
+{
+    return $exception->getMessage();
+}

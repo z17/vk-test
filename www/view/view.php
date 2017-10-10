@@ -78,6 +78,11 @@ function delete()
     echo prepareTemplate($content, 'Продукт удалён');
 }
 
+function error($message)
+{
+    echo prepareTemplate($message, 'Error');
+}
+
 function prepareTemplate($content, $title)
 {
     $template = file_get_contents('./resources/template/template.html');

@@ -10,19 +10,26 @@ require_once 'product.php';
 
 $path = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : '';
 
-switch ($path) {
-    case '/':
-        Controller\main();
-        break;
-    case '/add':
-        Controller\addProduct();
-        break;
-    case '/update/':
-        Controller\updateProduct();
-        break;
-    case '/delete/':
-        Controller\deleteProduct();
-        break;
-    default:
-        break;
+try {
+    switch ($path) {
+        case '/':
+            Controller\main();
+            break;
+        case '/add':
+            Controller\addProduct();
+            break;
+        case '/update/':
+            Controller\updateProduct();
+            break;
+        case '/delete/':
+            Controller\deleteProduct();
+            break;
+        case '/generate/':
+            Controller\generateTestData();
+            break;
+        default:
+            break;
+    }
+} catch (Exception $e) {
+    Controller\error($e);
 }

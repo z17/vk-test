@@ -53,3 +53,13 @@ function deleteProduct()
 
     View\delete();
 }
+
+function generateTestData() {
+    Model\generateTestData();
+}
+
+function error($exception)
+{
+    $message = Model\processError($exception);
+    View\error($message);
+}
