@@ -2,8 +2,6 @@
 
 namespace View;
 
-// todo: вынести в константы title и пути
-
 function main($productsData)
 {
     $productHtml = file_get_contents('./resources/template/product.html');

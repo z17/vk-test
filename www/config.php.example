@@ -2,13 +2,20 @@
 
 function getConfig()
 {
-    return [
+    static $config = [
         'db' => [
             'host' => '',
             'name' => '',
             'user' => '',
             'password' => '',
-        ]
-        'page_size' => 5
+        ],
+        'cache' => [
+            'host' => '',
+            'port' => 0,
+            'lifetime' => 60 * 60 * 24
+        ],
+        'page_size' => 20
     ];
+
+    return $config;
 }

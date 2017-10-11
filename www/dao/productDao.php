@@ -72,7 +72,8 @@ function getProductList($orderType, $limitStart, $limitEnd)
       FROM product p
       JOIN (
 	    SELECT id FROM product ORDER BY $orderType LIMIT :start, :end 
-      ) AS i ON i.id = p.id;";
+      ) AS i ON i.id = p.id
+      ORDER BY $orderType";
     $base = getConnection();
     $sql = $base->prepare($query);
     $sql->bindParam(':start', $limitStart, PDO::PARAM_INT);

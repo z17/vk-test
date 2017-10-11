@@ -1,21 +1,22 @@
 <?php
 
 require_once 'config.php';
+require_once 'data/product.php';
 require_once 'dao/productDao.php';
+require_once 'cache/memcached.php';
 require_once 'controller/controllers.php';
 require_once 'model/product.php';
 require_once 'model/productHelper.php';
 require_once 'view/view.php';
-require_once 'product.php';
 
-$path = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : '';
+$path = isset($_SERVER["REDIRECT_URL"]) ? $_SERVER["REDIRECT_URL"] : '';
 
 try {
     switch ($path) {
-        case '/':
+        case '':
             Controller\main();
             break;
-        case '/add':
+        case '/add/':
             Controller\addProduct();
             break;
         case '/update/':
@@ -28,6 +29,7 @@ try {
             Controller\generateTestData();
             break;
         default:
+            throw new Exception("404");
             break;
     }
 } catch (Exception $e) {
