@@ -8,30 +8,62 @@ use Cache;
 function getProducts($order, $page)
 {
     validateProductOrder($order);
-    $limit = getProductsLimit($page);
+    $pageCacheKey = getPageCacheKey($order, $page);
+    $productIds = Cache\get($pageCacheKey);
 
-    $cacheKey = $order . '_' . $page;
-    $cachedData = Cache\get($cacheKey);
-    if ($cachedData !== NULL) {
-        return [
-            'products' => $cachedData['products'],
-            'max_page' => $cachedData['max_page'],
-            'current_page' => $page
-        ];
+    if ($productIds === NULL) {
+        $limit = getProductsLimit($page);
+        $productIds = Dao\getProductIdList($order, $limit[0], $limit[1]);
+        Cache\set($pageCacheKey, $productIds);
     }
 
-    $products = Dao\getProductList($order, $limit[0], $limit[1]);
-    $count = Dao\countProducts();
-    $maxPage = ceil($count / getConfig()['page_size']);
+    $productsCacheKeys = array_map("Model\\getProductCacheKey", $productIds);
+    $cacheProductsMap = Cache\getMulti($productsCacheKeys);
+    $unknownIds = [];
+    $unknownProductsMap = [];
+    foreach ($productIds as $id) {
+        if (!isset($cacheProductsMap[getProductCacheKey($id)])) {
+            $unknownIds[] = $id;
+        }
 
-    $resultObject = [
+    }
+
+    if (!empty($unknownIds)) {
+        $unknownProducts = Dao\getProductsByArray($unknownIds);
+        $objToCache = [];
+        foreach ($unknownProducts as $product) {
+            $unknownProductsMap[$product['id']] = $product;
+            $objToCache[getProductCacheKey($product['id'])] = $product;
+        }
+        Cache\setMulti($objToCache);
+    }
+
+    $products = [];
+    foreach ($productIds as $id) {
+        $cacheKey = getProductCacheKey($id);
+        if (isset($cacheProductsMap[$cacheKey])) {
+            $products[] = $cacheProductsMap[$cacheKey];
+        } elseif (isset($unknownProductsMap[$id])) {
+            $products[] = $unknownProductsMap[$id];
+        }
+    }
+    return [
         'products' => $products,
-        'max_page' => $maxPage,
+        'max_page' => getMaxPage(),
+        'current_page' => $page
     ];
+}
 
-    Cache\set($cacheKey, $resultObject);
-    $resultObject['current_page'] = $page;
-    return $resultObject;
+
+function getMaxPage()
+{
+    $maxPage = Cache\get('max_page');
+    if ($maxPage === NULL) {
+        $count = Dao\countProducts();
+        $maxPage = ceil($count / getConfig()['page_size']);
+        Cache\set('max_page', $maxPage);
+    }
+    return $maxPage;
 }
 
 function addProduct($name, $description, $price, $img)
@@ -40,7 +72,8 @@ function addProduct($name, $description, $price, $img)
 
     $product = product(0, $name, $description, $price, $img);
     if (empty($errors)) {
-        Dao\addProduct($product);
+        $product['id'] = Dao\addProduct($product);
+        clearFullPageCacheFromProduct($product);
     }
 
     return [
@@ -57,13 +90,20 @@ function updateProduct($tryToAdd, $id, $name, $description, $price, $img)
         throw new \Exception("Unknown product");
     }
     $errors = NULL;
+
     if ($tryToAdd) {
         $errors = validateProduct($name, $description, $price, $img);
 
         if (empty($errors)) {
-            // todo: may be I should reset memcached, but I haven't any information for it in task
             $product = product($id, $name, $description, $price, $img);
             Dao\updateProduct($product);
+
+            Cache\set(getProductCacheKey($product['id']), $product);
+
+            if ($price !== $product['price']) {
+                clearPageCacheFromProduct($product, 'price');
+            }
+
         }
     }
     return [
@@ -81,7 +121,34 @@ function deleteProduct($id)
     }
 
     Dao\deleteProduct($id);
+    clearFullPageCacheFromProduct($product);
+    Cache\delete(getProductCacheKey($id));
+}
 
+function clearFullPageCacheFromProduct($product)
+{
+    clearPageCacheFromProduct($product, 'id');
+    clearPageCacheFromProduct($product, 'price');
+}
+
+function clearPageCacheFromProduct($product, $order)
+{
+    switch ($order) {
+        case 'id':
+            $productsNumber = Dao\countProductsBeforeId($product['id']);
+            break;
+        case 'price':
+            $productsNumber = Dao\countProductsBeforePrice($product['price']);
+            break;
+        default:
+            throw new \Exception("Error");
+    }
+
+    $resetStartPage = ceil($productsNumber / getConfig()['page_size']);
+    $maxPage = getMaxPage();
+
+    $keys = getPageKeys('id', $resetStartPage, $maxPage);
+    Cache\deleteMulti($keys);
 }
 
 function generateTestData()
