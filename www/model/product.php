@@ -147,7 +147,7 @@ function clearPageCacheFromProduct($product, $order)
     $resetStartPage = ceil($productsNumber / getConfig()['page_size']);
     $maxPage = getMaxPage();
 
-    $keys = getPageKeys('id', $resetStartPage, $maxPage);
+    $keys = getPageKeys($order, $resetStartPage, $maxPage);
     Cache\deleteMulti($keys);
 }
 
